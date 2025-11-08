@@ -14,7 +14,7 @@ pipeline {
         stage('Source') {
             steps {
                 echo "Pulling code from GitHub..."
-                git 'https://github.com/abdelrahmanonline4/deploy-tier-application-backend-Database-proxy-'
+                git 'https://github.com/amrAdel-1/k8s-deployment-pipeline1'
             }
         }
 
