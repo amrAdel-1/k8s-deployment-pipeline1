@@ -1,5 +1,5 @@
 pipeline {
-    agent { label 'jenkins-agent' }
+    agent { label 'my-agent' }
 
     environment {
         DOCKER_REGISTRY = "amradel2002"
