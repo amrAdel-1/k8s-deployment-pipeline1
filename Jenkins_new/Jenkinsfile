@@ -31,9 +31,12 @@ pipeline {
         stage('Push All') {
             steps {
                 container('docker') {
+                    // 'dockerhub' credentials provide DOCKER_USER and DOCKER_PASS
                     withCredentials([usernamePassword(credentialsId: 'dockerhub', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
                         sh """
-                        echo $DOCKER_HUB_PASS | docker login -u $DOCKER_REGISTRY --password-stdin
+                        # Fixed: Use DOCKER_PASS (from withCredentials) instead of DOCKER_HUB_PASS
+                        # Fixed: Use DOCKER_USER (from withCredentials) for the login username
+                        echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin
                         docker push ${DOCKER_REGISTRY}/backend:${BUILD_TAG}
                         docker push ${DOCKER_REGISTRY}/proxy:${BUILD_TAG}
                         
@@ -63,10 +66,12 @@ pipeline {
 
         stage('Smoke Test') {
             steps {
+                // This step assumes the Jenkins agent has network access to the APP_HEALTH_URL
+                // inside the Kubernetes cluster.
                 sh """
                 STATUS=\$(curl -s -o /dev/null -w "%{http_code}" $APP_HEALTH_URL)
                 if [ "\$STATUS" -ne 200 ]; then
-                    echo "Smoke Test Failed"
+                    echo "Smoke Test Failed - Received HTTP status \$STATUS"
                     exit 1
                 fi
                 echo "Smoke Test Passed"
