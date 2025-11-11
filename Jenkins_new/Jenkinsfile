@@ -20,7 +20,7 @@ pipeline {
             steps {
                 container('docker') {
                     sh """
-                    docker build -t ${DOCKER_REGISTRY}/backend:${BUILD_TAG} ./Dockerfile
+                    docker build -t ${DOCKER_REGISTRY}/backend:${BUILD_TAG} .
                     docker build -t ${DOCKER_REGISTRY}/proxy:${BUILD_TAG} ./nginx
                 
                     """
