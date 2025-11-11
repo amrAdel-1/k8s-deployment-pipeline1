@@ -5,7 +5,7 @@ pipeline {
         DOCKER_REGISTRY = "amradel2002"
         BUILD_TAG       = "${BUILD_NUMBER}"
         NAMESPACE       = 'dev'
-        APP_HEALTH_URL  = "http://proxy.${NAMESPACE}.svc.cluster.local/health"
+        APP_HEALTH_URL  = "https://proxy.${NAMESPACE}.svc.cluster.local"
     }
 
     stages {
@@ -31,7 +31,7 @@ pipeline {
         stage('Push All') {
             steps {
                 container('docker') {
-                    withCredentials([string(credentialsId: 'dockerhub-pass', variable: 'DOCKER_HUB_PASS')]) {
+                    withCredentials([usernamePassword(credentialsId: 'dockerhub', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
                         sh """
                         echo $DOCKER_HUB_PASS | docker login -u $DOCKER_REGISTRY --password-stdin
                         docker push ${DOCKER_REGISTRY}/backend:${BUILD_TAG}
