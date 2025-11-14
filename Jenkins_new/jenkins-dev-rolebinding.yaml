@@ -5,7 +5,7 @@ metadata:
   namespace: dev
 subjects:
 - kind: ServiceAccount
-  name: jenkins         # اسم الـ ServiceAccount اللي هتستخدمه
+  name: default         # اسم الـ ServiceAccount اللي هتستخدمه
   namespace: jenkins   # namespace بتاع الـ ServiceAccount
 roleRef:
   kind: Role
