@@ -4,7 +4,7 @@ pipeline {
     environment {
         DOCKER_REGISTRY = "amradel2002"
         BUILD_TAG       = "${BUILD_NUMBER}"
-        NAMESPACE       = 'dev'
+        NAMESPACE       = "dev"
         APP_HEALTH_URL  = "https://proxy.${NAMESPACE}.svc.cluster.local"
     }
 
@@ -51,15 +51,15 @@ pipeline {
                 container('helm') {
                     sh """
                     helm upgrade --install my-app ./my-app \
-
-                        --namespace $NAMESPACE \
-                        --set backend.image.repository=$DOCKER_REGISTRY/backend \
-                        --set backend.image.tag=$BUILD_TAG \
-                        --set proxy.image.repository=$DOCKER_REGISTRY/proxy \
-                        --set proxy.image.tag=$BUILD_TAG \
-                        --set database.image.repository=$DOCKER_REGISTRY/database \
-                        --set database.image.tag=$BUILD_TAG \
-                        --wait --timeout=5m
+                      --namespace $NAMESPACE \
+                      --set backend.image.repository=$DOCKER_REGISTRY/backend \
+                      --set backend.image.tag=$BUILD_TAG \
+                      --set proxy.image.repository=$DOCKER_REGISTRY/proxy \
+                      --set proxy.image.tag=$BUILD_TAG \
+                      --set database.image.repository=$DOCKER_REGISTRY/database \
+                      --set database.image.tag=$BUILD_TAG \
+                      --wait \ 
+                      --timeout=5m
                     """
                 }
             }
