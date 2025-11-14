@@ -59,8 +59,8 @@ pipeline {
                       --set proxy.image.tag=$BUILD_TAG \
                       --set database.image.repository=$DOCKER_REGISTRY/database \
                       --set database.image.tag=$BUILD_TAG \
-                      --wait \ 
-                      --timeout=5m
+                      --wait --timeout=5m
+                      
                     """
                 }
             }
