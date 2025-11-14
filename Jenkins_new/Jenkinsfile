@@ -50,6 +50,7 @@ pipeline {
             steps {
                 container('helm') {
                     sh """
+                        set -e
                     helm upgrade --install my-app ./my-app \
                       --namespace $NAMESPACE \
                       --set backend.image.repository=$DOCKER_REGISTRY/backend \
