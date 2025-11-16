@@ -4,12 +4,12 @@ metadata:
   name: backend-deployment
   namespace: dev
   labels:
-    app: backend-deployment
+    app: backend
 spec:
+  replicas: {{ .Values.backend.replicaCount }}
   selector:
     matchLabels:
       app: backend
-  replicas: 2
   template:
     metadata:
       labels:
@@ -18,29 +18,28 @@ spec:
       volumes:
       - name: db-password
         secret:
-          secretName: db-secret
-      - name: pre-install
-        emptyDir: {}
-      initContainers:
-      - name: pre-install
-        image: busybox
-        command: ['sh', '-c', 'cat /db-secret/db-password >> /run/secrets/db-password']
-        volumeMounts:
-        - name: db-password
-          mountPath: "/db-secret"
-        - name: pre-install
-          mountPath: "/run/secrets"
+          secretName: {{ .Values.backend.env.DB_PASSWORD_SECRET }}
+
       containers:
       - name: backend
-        image: 3booda24/app-go:latest
-        imagePullPolicy: Never
+        image: "{{ .Values.backend.image.repository }}:{{ .Values.backend.image.tag }}"
+        imagePullPolicy: {{ .Values.backend.image.pullPolicy }}
         ports:
-        - containerPort: 8000
+        - containerPort: {{ .Values.backend.service.port }}
+
+        env:
+        - name: DB_HOST
+          value: "{{ .Values.backend.env.DB_HOST }}"
+        - name: DB_PORT
+          value: "{{ .Values.backend.env.DB_PORT }}"
+        - name: DB_USER
+          value: "{{ .Values.backend.env.DB_USER }}"
+        - name: DB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: {{ .Values.backend.env.DB_PASSWORD_SECRET }}
+              key: {{ .Values.backend.env.DB_PASSWORD_KEY }}
+
         volumeMounts:
-        - name: pre-install
-          mountPath: "/run/secrets"
         - name: db-password
-          mountPath: "/db-secret"
-
-
-
+          mountPath: "/run/secrets"
