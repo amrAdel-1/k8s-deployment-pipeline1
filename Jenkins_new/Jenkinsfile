@@ -71,7 +71,7 @@ pipeline {
                 // This step assumes the Jenkins agent has network access to the APP_HEALTH_URL
                 // inside the Kubernetes cluster.
                 sh """
-                STATUS=\$(curl -s -o /dev/null -w "%{http_code}" $APP_HEALTH_URL)
+                curl -k ${APP_HEALTH_URL}
                 if [ "\$STATUS" -ne 200 ]; then
                     echo "Smoke Test Failed - Received HTTP status \$STATUS"
                     exit 1
