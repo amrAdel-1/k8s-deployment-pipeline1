@@ -33,7 +33,7 @@ spec:
       containers:
       - name: backend
         image: 3booda24/app-go:latest
-        imagePullPolicy: Never
+        imagePullPolicy: Always
         ports:
         - containerPort: 8000
         volumeMounts:
