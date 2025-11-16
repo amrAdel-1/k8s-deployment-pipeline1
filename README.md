@@ -208,9 +208,6 @@ Services are isolated in separate networks with controlled communication paths.
 
 This project is open source and available for educational purposes.
 
-## 👤 Author
-
-Built with ❤️ to demonstrate modern DevOps practices
 
 ---
 
